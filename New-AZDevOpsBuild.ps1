@@ -1,29 +1,31 @@
+
+#New-AZDevOpsBuild -name 'testbb' -project 'PwshDevOps_Testing' -description 'testing builds' -repository 'PwshDevOps_Testing' -repoType 'tfsgit' -branch 'master' -org 'https://dev.azure.com/adminturneddevops' -ymlPath '/azure-pipelines.yml'
 function New-AZDevOpsBuild {
     [cmdletbinding()]
     param(
         [string]
-        $name = 'testbb',
+        $name,
 
         [string]
-        $project = ' PwshDevOps_Testing',
+        $project,
 
         [string]
-        $description = 'testing builds',
+        $description,
 
         [string]
-        $repository = 'PwshDevOps_Testing',
+        $repository,
 
         [string]
-        $repoType = 'tfsgit',
+        $repoType,
 
         [string]
-        $branch = 'master',
+        $branch,
 
         [string]
-        $org = 'https://dev.azure.com/adminturneddevops',
+        $org,
         
         [string]
-        $ymlPath = '/azure-pipelines.yml'
+        $ymlPath
     )
     az pipelines create --name $name `
         --project $project `
