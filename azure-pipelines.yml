@@ -1,0 +1,19 @@
+# Copy repo and publish/drop an artifact
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+steps:
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '*YourReposSourceFolder*'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'drop'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
