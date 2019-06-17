@@ -72,13 +72,26 @@ function New-AZDevOpsBuild {
         [string]
         $ymlPath
     )
-    az pipelines create --name $name `
-        --project $project `
-        --description $description `
-        --repository $repository `
-        --repository-type $repoType `
-        --branch $branch `
-        --organization $org `
-        --yml-path $ymlPath
 
+    PROCESS {
+
+        try {
+            if ($PSCmdlet.ShouldProcess($name) -and $PSBoundParameters.ContainsKey('repoType')) {
+                Write-Verbose "Creating new build: $name under project: $project"
+                az pipelines create --name $name `
+                    --project $project `
+                    --description $description `
+                    --repository $repository `
+                    --repository-type $repoType `
+                    --branch $branch `
+                    --organization $org `
+                    --yml-path $ymlPath
+            }
+        }
+
+        catch {
+            Write-Warning 'An error has occured'
+            $PSCmdlet.ThrowTerminatingError($_)
+        }
+    }
 }
