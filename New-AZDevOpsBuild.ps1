@@ -1,7 +1,5 @@
-
-#New-AZDevOpsBuild -name 'testbb' -project 'PwshDevOps_Testing' -description 'testing builds' -repository 'PwshDevOps_Testing' -repoType 'tfsgit' -branch 'master' -org 'https://dev.azure.com/adminturneddevops' -ymlPath '/azure-pipelines.yml'
 function New-AZDevOpsBuild {
-    [cmdletbinding()]
+    [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = 'newBuild', ConfirmImpact = 'high')]
     param(
         [string]
         $name,
