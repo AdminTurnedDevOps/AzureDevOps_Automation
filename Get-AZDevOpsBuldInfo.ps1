@@ -7,13 +7,13 @@ function Get-AZDevOpsBuildInfo {
         [ValidateNotNullOrEmpty()]
         [Alias('ORGURL')]
         [string]
-        $org = 'https://dev.azure.com/adminturneddevops/',
+        $org,
 
         [parameter(Mandatory,
             HelpMessage = 'Please enter the project that you want to pull build results from')]
         [ValidateNotNullOrEmpty()]
         [string]
-        $project = "Simple API"
+        $project
     
     )
 
