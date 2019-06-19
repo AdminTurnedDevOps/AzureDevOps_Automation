@@ -4,28 +4,42 @@ function Get-AZDevOpsBuildInfo {
         [parameter(Mandatory,
             Position = 0,
             HelpMessage = 'Please enter the URL to your orgs Azure DevOps primary account',
-            ValueFromPipeline,
-            ParameterSetName = 'newBuildSearchResult')]
+            ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [Alias('ORGURL')]
         [string]
         $org,
 
         [parameter(Mandatory,
-            HelpMessage = 'Please enter the project that you want to pull build results from',
-            ParameterSetName = 'newBuildSearchResult')]
+            HelpMessage = 'Please enter the project that you want to pull build results from')]
         [ValidateNotNullOrEmpty()]
         [string]
-        $project
+        $project,
+
+        [parameter(HelpMessage = 'Please enter the project that you want to pull build results from',
+            ParameterSetName = '1SearchResult')]
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $buildName
     
     )
 
     PROCESS {
         try {
-            $buildResults = az pipelines build list --org $org --project $project
-            $convertbuildResults = $buildResults | ConvertFrom-Json
+            if ($PSBoundParameters.ContainsKey('buildName')) {
+                $buildResults = az pipelines list --name $buildName --org $org --project $project
+                $convertbuildResults = $buildResults | ConvertFrom-Json
+    
+                $convertbuildResults | Select-Object id, name, revision, authoredBy | fl
+            }
 
-            $convertbuildResults | Select-Object buildNumber, startTime, lastChangedDate, result | fl
+            else {
+
+                $buildResults = az pipelines build list --org $org --project $project
+                $convertbuildResults = $buildResults | ConvertFrom-Json
+
+                $convertbuildResults | Select-Object buildNumber, startTime, lastChangedDate, result | fl
+            }
         }
 
         catch {
@@ -33,5 +47,4 @@ function Get-AZDevOpsBuildInfo {
             $PSCmdlet.ThrowTerminatingError($_)
         }
     }
-
 }
